@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile.prod
     command: gunicorn whaling-coin.wsgi:application --bind 0.0.0.0:8000
     environment:
-      DJANGO_SETTINGS_MODULE: whaling.settings.prod
+      DJANGO_SETTINGS_MODULE: whaling-coin.settings.prod
     env_file:
       - .env
     volumes:
