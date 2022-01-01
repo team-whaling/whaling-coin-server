@@ -18,6 +18,7 @@ multidict==5.2.0
 mysqlclient==2.1.0
 pycares==4.1.2
 pycparser==2.21
+PyJWT==2.3.0
 requests==2.26.0
 sqlparse==0.4.2
 urllib3==1.26.7
