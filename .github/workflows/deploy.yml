@@ -1,0 +1,88 @@
+name: Deploy to EC2
+on: [push]
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@master
+
+    - name: create env file
+      run: |
+        touch .env
+        echo "${{ secrets.ENV_VARS }}" >> .env
+
+    - name: create remote directory
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ubuntu
+        key: ${{ secrets.KEY }}
+        script: mkdir -p /home/ubuntu/srv/ubuntu
+
+    - name: copy source via ssh key
+      uses: burnett01/rsync-deployments@4.1
+      with:
+        switches: -avzr --delete
+        remote_path: /home/ubuntu/srv/ubuntu/
+        remote_host: ${{ secrets.HOST }}
+        remote_user: ubuntu
+        remote_key: ${{ secrets.KEY }}
+
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ubuntu
+        key: ${{ secrets.KEY }}
+        script: |
+          sh /home/ubuntu/srv/ubuntu/config/scripts/deploy.sh
+
+    - name: delete useless images and containers
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ubuntu
+        key: ${{ secrets.KEY }}
+        script: |
+          sudo yes y | sudo docker image prune
+          sudo yes y | sudo docker container prune
+
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the develop branch
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
