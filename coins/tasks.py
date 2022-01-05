@@ -1,9 +1,57 @@
 from __future__ import absolute_import, unicode_literals
 from celery import shared_task
 from .models import Cryptocurrency
+import requests
+
+# API 호출 정리
+def call_api(url, **params):
+    response = requests.get(url, params=params)
+    print(response.url)
+    return response.json()
+
+def get_tickers():  # 전체 티커 다 가져오는 함수
+    url = "https://api.upbit.com/v1/market/all" # 여기서 KRW-BTC, 비트코인, bitcoin 다 갖고옴
+    markets = call_api(url)
+    tickers = []
+    korean_name = []
+    english_name = []
+    for x in markets:
+        if x['market'].startswith("KRW"):
+            tickers.append(x['market'])
+            korean_name.append(x['korean_name'])
+            english_name.append(x['english_name'])
+    return tickers, korean_name, english_name
+
+def get_price():    # 우리 디비에 들어갈 정보들 다 가져오는 함수
+    tickers, ko_name, eng_name = get_tickers()
+    url = "https://api.upbit.com/v1/ticker"
+    data = call_api(url,markets=tickers)
+    ret = []
+    index = 0
+    for x in data:
+        response = {
+            "coin_code" : x['market'],
+            "coin_name" : ko_name[index],
+            "cur_price" : x['trade_price'],
+            "trade_date" : x['trade_date'],
+            "trade_time" : x['trade_time']
+        }
+        index += 1
+        ret.append(response)
+    return ret
 
 @shared_task()
 def update_api():
+    api_data = get_price()
     print("Update CryptoCurrrency")
+    for data in api_data:
+        try:
+            crypto = Cryptocurrency.objects.get(coin_code = data['coin_code'])
+        except Cryptocurrency.DoesNotExist:
+            Cryptocurrency.objects.create(coin_code = data['coin_code'],
+                                          coin_name = data['coin_name'],
+                                          cur_price = data['cur_price'],
+                                          trade_date = data['trade_date'],
+                                          trade_time = data['trade_time'])
 
 
