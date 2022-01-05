@@ -45,22 +45,26 @@ services:
 
   celery_worker:
     container_name: celery_worker
+    build:
+      context: ./
+      dockerfile: Dockerfile.prod
     ports: []
     depends_on:
       - web
       - rabbitmq
     command: sh -c "celery -A whaling-coin worker --loglevel=info"
-    restart: always
 
   celery_beat:
     container_name: celery_beat
+    build:
+      context: ./
+      dockerfile: Dockerfile.prod
     ports: []
     depends_on:
         - web
         - rabbitmq
         - celery_worker
     command: sh -c "celery -A whaling-coin beat --loglevel=info"
-    restart: always
 
 volumes:
   static:
