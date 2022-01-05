@@ -119,7 +119,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 CELERY_BROKER_URL = 'amqp://ec2-13-125-205-227.ap-northeast-2.compute.amazonaws.com:5672'
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TAST_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 # Default primary key field type
