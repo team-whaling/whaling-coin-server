@@ -9,7 +9,7 @@ def call_api(url, **params):
     print(response.url)
     return response.json()
 
-def get_tickers():  # 전체 티커 다 가져오는 함수
+def get_tickers():  # 전체 티커 다 가져오는 함수. 혹시 몰라서 영문명도 땡겨옴
     url = "https://api.upbit.com/v1/market/all" # 여기서 KRW-BTC, 비트코인, bitcoin 다 갖고옴
     markets = call_api(url)
     tickers = []
@@ -40,18 +40,20 @@ def get_price():    # 우리 디비에 들어갈 정보들 다 가져오는 함�
         ret.append(response)
     return ret
 
-@shared_task()
-def update_api():
+@shared_task
+def update_api():   # 없으면 생성, 있으면 가격 업데이트.
     api_data = get_price()
     print("Update CryptoCurrrency")
     for data in api_data:
         try:
             crypto = Cryptocurrency.objects.get(coin_code = data['coin_code'])
-        except Cryptocurrency.DoesNotExist:
+            crypto.cur_price = data['cur_price']
+            crypto.trade_date = data['trade_date']
+            crypto.trade_time = data['trade_time']
+            crypto.save()
+        except Cryptocurrency.DoesNotExist: # 객체가 존재하지 않을 경우 생성
             Cryptocurrency.objects.create(coin_code = data['coin_code'],
                                           coin_name = data['coin_name'],
                                           cur_price = data['cur_price'],
                                           trade_date = data['trade_date'],
                                           trade_time = data['trade_time'])
-
-
