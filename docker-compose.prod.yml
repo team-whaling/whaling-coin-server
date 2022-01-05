@@ -51,6 +51,16 @@ services:
       - rabbitmq
     command: sh -c "celery -A whaling-coin worker"
 
+  celery_beat:
+    container_name: celery_bit
+    build:
+      context: ./
+      dockerfile: Dockerfile.prod
+    depends_on:
+        - web
+        - rabbitmq
+        - celery_worker
+    command: sh -c "celery -A whaling-coin beat"
 
 volumes:
   static:

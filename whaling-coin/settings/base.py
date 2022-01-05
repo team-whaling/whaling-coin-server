@@ -105,7 +105,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False  # Auto add 한국시간으로 바꿔줌
 
 
 # Static files (CSS, JavaScript, Images)
@@ -115,7 +115,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Celery
-CELERY_BROKER_URL = 'amqp://localhost:5672'
+# AWS 퍼블릭 DNS로 바꿔줘야 정상 작동함.
+CELERY_BROKER_URL = 'amqp://ec2-13-125-205-227.ap-northeast-2.compute.amazonaws.com:5672'
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TAST_SERIALIZER = 'json'
