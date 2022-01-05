@@ -40,27 +40,29 @@ services:
     ports:
       - "5672:5672" # Default Port
       - "15672:15672" # For UI
+    expose:
+      - "15672"
 
   celery_worker:
     container_name: celery_worker
-    build:
-      context: ./
-      dockerfile: Dockerfile.prod
+    build: ./whaling-coin
+    ports: []
     depends_on:
       - web
       - rabbitmq
-    command: sh -c "celery -A whaling-coin worker"
+    command: sh -c "celery -A whaling-coin worker --loglevel=info"
+    restart: always
 
   celery_beat:
-    container_name: celery_bit
-    build:
-      context: ./
-      dockerfile: Dockerfile.prod
+    container_name: celery_beat
+    build: ./whaling-coin
+    ports: []
     depends_on:
         - web
         - rabbitmq
         - celery_worker
-    command: sh -c "celery -A whaling-coin beat"
+    command: sh -c "celery -A whaling-coin beat --loglevel=info"
+    restart: always
 
 volumes:
   static:
