@@ -45,7 +45,6 @@ services:
 
   celery_worker:
     container_name: celery_worker
-    build: ./whaling-coin
     ports: []
     depends_on:
       - web
@@ -55,7 +54,6 @@ services:
 
   celery_beat:
     container_name: celery_beat
-    build: ./whaling-coin
     ports: []
     depends_on:
         - web
