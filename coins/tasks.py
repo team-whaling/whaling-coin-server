@@ -30,7 +30,7 @@ def get_price():    # 우리 디비에 들어갈 정보들 다 가져오는 함�
     index = 0
     for x in data:
         response = {
-            "coin_code" : x['market'],
+            "coin_code" : x['market'][4:],
             "coin_name" : ko_name[index],
             "cur_price" : x['trade_price'],
             "trade_date" : x['trade_date'],
