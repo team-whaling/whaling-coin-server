@@ -33,8 +33,8 @@ def get_price():    # 우리 디비에 들어갈 정보들 다 가져오는 함�
             "coin_code" : x['market'][4:],
             "coin_name" : ko_name[index],
             "cur_price" : x['trade_price'],
-            "trade_date" : x['trade_date'],
-            "trade_time" : x['trade_time']
+            "trade_date" : x['trade_date_kst'],
+            "trade_time" : x['trade_time_kst']
         }
         index += 1
         ret.append(response)
