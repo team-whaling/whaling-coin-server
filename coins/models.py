@@ -5,7 +5,7 @@ from django.db import models
 class Cryptocurrency(models.Model):
     coin_code = models.CharField(max_length=10,primary_key=True)    # PK
     coin_name = models.CharField(max_length=12,null=False) # 한글이름
-    coin_fullname = models.CharField(null=False)
+    coin_fullname = models.CharField(max_length=30,null=False)
     coin_image = models.URLField()
     cur_price = models.IntegerField(null=False)
     trade_date = models.CharField(max_length=10, null=False)
