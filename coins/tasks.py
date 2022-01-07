@@ -61,6 +61,7 @@ def update_api():   # 없으면 생성, 있으면 가격 업데이트.
         except Cryptocurrency.DoesNotExist: # 객체가 존재하지 않을 경우 생성
             Cryptocurrency.objects.create(coin_code = data['coin_code'],
                                           coin_name = data['coin_name'],
+                                          coin_fullname = data['coin_name'] + '(' + data['coin_code'] + ')',
                                           cur_price = data['cur_price'],
                                           trade_date = data['trade_date'],
                                           trade_time = data['trade_time'],
