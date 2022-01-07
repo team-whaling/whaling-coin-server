@@ -26,7 +26,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 DEBUG = True
 SECRET_KEY = env('DJANGO_SECRET_KEY')
-ALLOWED_HOSTS = [env('DJANGO_ALLOWED_HOSTS')]
+ALLOWED_HOSTS = env('DJANGO_ALLOWED_HOSTS')
 
 
 # Application definition
