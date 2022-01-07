@@ -27,7 +27,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 DEBUG = True
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('DJANGO_SECRET_KEY')
-ALLOWED_HOSTS = ["ec2-13-125-205-227.ap-northeast-2.compute.amazonaws.com"]
+ALLOWED_HOSTS = env('DJANGO_ALLOWED_HOSTS')
 
 
 # Application definition
@@ -112,7 +112,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Celery
 # AWS 퍼블릭 DNS로 바꿔줘야 정상 작동함.
-CELERY_BROKER_URL = 'amqp://ec2-13-125-205-227.ap-northeast-2.compute.amazonaws.com:5672'
+CELERY_BROKER_URL = env('CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
