@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 from celery import shared_task
 from .models import Cryptocurrency
+from django.utils import timezone
 import requests
 
 # API 호출 정리
@@ -50,10 +51,12 @@ def update_api():   # 없으면 생성, 있으면 가격 업데이트.
             crypto.cur_price = data['cur_price']
             crypto.trade_date = data['trade_date']
             crypto.trade_time = data['trade_time']
+            crypto.updated_at = timezone.now()
             crypto.save()
         except Cryptocurrency.DoesNotExist: # 객체가 존재하지 않을 경우 생성
             Cryptocurrency.objects.create(coin_code = data['coin_code'],
                                           coin_name = data['coin_name'],
                                           cur_price = data['cur_price'],
                                           trade_date = data['trade_date'],
-                                          trade_time = data['trade_time'])
+                                          trade_time = data['trade_time'],
+                                          updated_at = timezone.now())

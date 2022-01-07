@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils import timezone
 # Create your models here.
 
 # Upbit에서 날짜랑 시간 두개로 나눠서 정보를 준다. 20220101, 171205 이런식.
@@ -10,7 +9,7 @@ class Cryptocurrency(models.Model):
     cur_price = models.IntegerField(null=False)
     trade_date = models.CharField(max_length=10, null=False)
     trade_time = models.CharField(max_length=10, null=False)
-    updated_at = models.DateTimeField(auto_now=True,default=timezone.now)
+    updated_at = models.DateTimeField()
 
 
 
