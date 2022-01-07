@@ -9,7 +9,8 @@ class Cryptocurrency(models.Model):
     cur_price = models.IntegerField(null=False)
     trade_date = models.CharField(max_length=10, null=False)
     trade_time = models.CharField(max_length=10, null=False)
-    updated_at = models.DateTimeField()
+    updated_date = models.IntegerField(null=False)
+    updated_time = models.IntegerField(null=False)
 
 
 
