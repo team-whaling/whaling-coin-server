@@ -8,7 +8,6 @@ import requests
 # API 호출 정리
 def call_api(url, **params):
     response = requests.get(url, params=params)
-    print(response.url)
     return response.json()
 
 def get_tickers():  # 전체 티커 다 가져오는 함수. 혹시 몰라서 영문명도 땡겨옴
