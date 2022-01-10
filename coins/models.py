@@ -8,6 +8,7 @@ class Cryptocurrency(models.Model):
     coin_fullname = models.CharField(max_length=30,null=False)
     coin_image = models.URLField()
     cur_price = models.IntegerField(null=False)
+    full_updated_time = models.DateTimeField()
     trade_date = models.CharField(max_length=10, null=False)
     trade_time = models.CharField(max_length=10, null=False)
     updated_date = models.IntegerField(null=False)

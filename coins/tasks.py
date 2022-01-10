@@ -45,7 +45,7 @@ def get_price():    # 우리 디비에 들어갈 정보들 다 가져오는 함�
 def update_api():   # 없으면 생성, 있으면 가격 업데이트.
     api_data = get_price()
     print("Update CryptoCurrrency")
-    kst_time = datetime.datetime.now(pytz.timezone('Asia/Seoul'))
+    kst_time = datetime.datetime.now(pytz.timezone('Asia/Seoul')).replace(tzinfo=None,microsecond=0,second=0)
     ymd = int(kst_time.strftime('%Y%m%d'))  # 업데이트 된 시간을 날짜랑 시간으로 나눠서
     hm = int(kst_time.strftime('%H%M'))
     for data in api_data:
@@ -56,6 +56,7 @@ def update_api():   # 없으면 생성, 있으면 가격 업데이트.
             crypto.trade_time = data['trade_time']
             crypto.updated_date = ymd
             crypto.updated_time = hm
+            crypto.full_updated_time = kst_time
             crypto.save()
         except Cryptocurrency.DoesNotExist: # 객체가 존재하지 않을 경우 생성
             Cryptocurrency.objects.create(coin_code = data['coin_code'],
@@ -65,4 +66,5 @@ def update_api():   # 없으면 생성, 있으면 가격 업데이트.
                                           trade_date = data['trade_date'],
                                           trade_time = data['trade_time'],
                                           updated_date = ymd,
-                                          updated_time = hm)
+                                          updated_time = hm,
+                                          full_updated_time = kst_time)
