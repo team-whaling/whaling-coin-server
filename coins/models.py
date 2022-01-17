@@ -15,5 +15,7 @@ class Cryptocurrency(models.Model):
     updated_date = models.IntegerField(null=False)
     updated_time = models.IntegerField(null=False)
 
+    class Meta:
+        managed = False
 
 
