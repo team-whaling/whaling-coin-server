@@ -126,21 +126,6 @@ class VoteCoin(models.Model):
         managed = False
         db_table = 'vote_coin'
 
-class VoteChoice(models.Model):
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
-    choice_id = models.BigAutoField(primary_key=True)
-    choice = models.IntegerField()
-    is_answer = models.IntegerField(blank=True, null=True)
-    participant = models.ForeignKey(AccountUser, models.DO_NOTHING)
-    vote = models.ForeignKey('VoteVote', models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'vote_choice'
-        app_label = 'vote_db1'
-
-
 class VoteVote(models.Model):
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
@@ -160,10 +145,31 @@ class VoteVote(models.Model):
     neg_participants = models.IntegerField()
     pos_whales = models.IntegerField()
     neg_whales = models.IntegerField()
-    uploader = models.ForeignKey(AccountUser, models.DO_NOTHING)
+    uploader = models.ForeignKey(AccountUser,
+                                 on_delete=models.CASCADE,
+                                 verbose_name='투표를 생성한 유저',
+                                 related_name='created_votes',
+                                 related_query_name='created_vote'
+                                 )
     total_participants = models.IntegerField()
 
     class Meta:
         managed = False
         db_table = 'vote_vote'
         app_label = 'vote_db1'
+
+class VoteChoice(models.Model):
+    created_at = models.DateTimeField()
+    updated_at = models.DateTimeField()
+    choice_id = models.BigAutoField(primary_key=True)
+    choice = models.IntegerField()
+    is_answer = models.IntegerField(blank=True, null=True)
+    participant = models.ForeignKey(AccountUser, on_delete=models.CASCADE)
+    vote = models.ForeignKey(VoteVote, on_delete=models.CASCADE)
+
+    class Meta:
+        managed = False
+        db_table = 'vote_choice'
+        app_label = 'vote_db1'
+
+
