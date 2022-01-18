@@ -5,9 +5,9 @@ from coins.models import Cryptocurrency
 import pytz
 import datetime
 
-# 투표 끝났는지 확인하는 함수
+# 투표 끝났는지 확인하는 함수g
 @shared_task
-def is_finishing():
+def check_finish():
     current_time = datetime.datetime.now(pytz.timezone('Asia/Seoul')).replace(tzinfo=None,microsecond=0,second=0)
     ongoing_votes = VoteVote.objects.filter(state=1)
     for vote in ongoing_votes:
