@@ -116,6 +116,15 @@ class DjangoSession(models.Model):
         managed = False
         db_table = 'django_session'
 
+class VoteCoin(models.Model):
+    coin_code = models.CharField(primary_key=True, max_length=10)
+    coin_krname = models.CharField(max_length=12)
+    coin_name = models.CharField(max_length=30)
+    coin_image = models.CharField(max_length=200)
+
+    class Meta:
+        managed = False
+        db_table = 'vote_coin'
 
 class VoteChoice(models.Model):
     created_at = models.DateTimeField()
