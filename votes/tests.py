@@ -12,9 +12,11 @@ def is_finishing():
     ongoing_votes = VoteVote.objects.filter(state=1)
     for vote in ongoing_votes:
         # 투표 마감 기한이 됐으면
-        if vote.finished_at == current_time:
-            vote.state = 2
-            vote.save()
+        if vote.finished_at <= current_time:
+            print(vote.finished_at)
+            print(current_time)
+            print("finish!")
+
 
 # Commnet에 따라서 가격 계산하기
 def calc_coinprice(text, price, percent):
@@ -31,11 +33,7 @@ def tracking():
         # Tracking 날짜가 되었으면
         if vote.tracked_at == current_time:
             vote.state = 3
-            vote.save()
             coin = Cryptocurrency.objects.get(coin_code=vote.coin)
             final_price = coin.cur_price
             vote.finished_price = final_price
             answer_price = calc_coinprice(vote.comment, vote.created_price, vote.range)
-
-is_finishing()
-tracking()
