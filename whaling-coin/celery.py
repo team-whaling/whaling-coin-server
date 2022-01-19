@@ -16,8 +16,16 @@ def debug_task(self):
 
 # crontab()에 인자를 안주면 기본 매 1분마다 실행한다.
 app.conf.beat_schedule = {
-    'add-every-minutes-crontab' : {
+    'Update-api-every-minutes-crontab' : {
         'task' : 'coins.tasks.update_api',
+        'schedule' : crontab(),
+    },
+    'Finishing-vote-every-minutes' : {
+        'task' : 'votes.tasks.check_finish',
+        'schedule' : crontab(),
+    },
+    'Tracking-vote-every-minutes' : {
+        'task' : 'votes.tasks.tracking',
         'schedule' : crontab(),
     }
 }
