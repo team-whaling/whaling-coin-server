@@ -145,6 +145,11 @@ class VoteVote(models.Model):
     neg_participants = models.IntegerField()
     pos_whales = models.IntegerField()
     neg_whales = models.IntegerField()
+    coin = models.ForeignKey(
+        VoteCoin,
+        on_delete=models.CASCADE,
+        verbose_name='투표를 생성할 코인의 종류',
+    )
     uploader = models.ForeignKey(AccountUser,
                                  on_delete=models.CASCADE,
                                  verbose_name='투표를 생성한 유저',
