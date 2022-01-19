@@ -130,6 +130,7 @@ class VoteChoice(models.Model):
     class Meta:
         managed = False
         db_table = 'vote_choice'
+        app_label = 'vote_db1'
 
 
 class VoteCoin(models.Model):
@@ -141,6 +142,7 @@ class VoteCoin(models.Model):
     class Meta:
         managed = False
         db_table = 'vote_coin'
+        app_label = 'vote_db1'
 
 
 class VoteVote(models.Model):
@@ -169,3 +171,4 @@ class VoteVote(models.Model):
     class Meta:
         managed = False
         db_table = 'vote_vote'
+        app_label = 'vote_db1'
