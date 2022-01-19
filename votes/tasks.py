@@ -26,7 +26,7 @@ def tracking():
         # Tracking 날짜가 되었으면
         if vote.tracked_at <= current_time:
             vote.state = 'tracked'
-            coin = Cryptocurrency.objects.get(coin_code=vote.coin.coin_code)
+            coin = Cryptocurrency.objects.get(coin_code=vote.coin.code)
             final_price = coin.cur_price
             price = vote.created_price
             vote.finished_price = final_price
