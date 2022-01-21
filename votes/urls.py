@@ -4,5 +4,5 @@ from .views import TestVoteView
 app_name = 'votes'
 
 urlpatterns = [
-    path('votes/', TestVoteView.as_view())
+    # path('votes/', TestVoteView.as_view())
 ]
