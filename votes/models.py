@@ -1,12 +1,13 @@
 from django.db import models
 
+
 class AccountUser(models.Model):
     password = models.CharField(max_length=128)
     last_login = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
     user_id = models.BigIntegerField(primary_key=True)
-    nickname = models.CharField(unique=True, max_length=20)
+    nickname = models.CharField(unique=True, max_length=20, db_collation='utf8_general_ci', blank=True, null=True)
     acc_percent = models.FloatField()
     point = models.IntegerField()
     profile_img = models.CharField(max_length=200, blank=True, null=True)
@@ -22,7 +23,7 @@ class AccountUser(models.Model):
 
 class AccountUserGroups(models.Model):
     id = models.BigAutoField(primary_key=True)
-    user = models.ForeignKey(AccountUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(AccountUser, models.DO_NOTHING)
     group = models.ForeignKey('AuthGroup', models.DO_NOTHING)
 
     class Meta:
@@ -116,21 +117,39 @@ class DjangoSession(models.Model):
         managed = False
         db_table = 'django_session'
 
+
+class VoteChoice(models.Model):
+    created_at = models.DateTimeField()
+    updated_at = models.DateTimeField()
+    choice_id = models.BigAutoField(primary_key=True)
+    choice = models.IntegerField(blank=True, null=True)
+    is_answer = models.IntegerField(blank=True, null=True)
+    participant = models.ForeignKey(AccountUser, models.DO_NOTHING)
+    vote = models.ForeignKey('VoteVote', models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'vote_choice'
+        app_label = 'vote_db1'
+
+
 class VoteCoin(models.Model):
-    coin_code = models.CharField(primary_key=True, max_length=10)
-    coin_krname = models.CharField(max_length=12)
-    coin_name = models.CharField(max_length=30)
-    coin_image = models.CharField(max_length=200)
+    code = models.CharField(primary_key=True, max_length=10)
+    krname = models.CharField(max_length=12)
+    name = models.CharField(max_length=30)
+    image = models.CharField(max_length=200)
 
     class Meta:
         managed = False
         db_table = 'vote_coin'
+        app_label = 'vote_db1'
+
 
 class VoteVote(models.Model):
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
     vote_id = models.BigAutoField(primary_key=True)
-    state = models.IntegerField()
+    state = models.CharField(max_length=10)
     finished_at = models.DateTimeField()
     tracked_at = models.DateTimeField()
     created_price = models.IntegerField()
@@ -145,36 +164,11 @@ class VoteVote(models.Model):
     neg_participants = models.IntegerField()
     pos_whales = models.IntegerField()
     neg_whales = models.IntegerField()
-    coin = models.ForeignKey(
-        VoteCoin,
-        on_delete=models.CASCADE,
-        verbose_name='투표를 생성할 코인의 종류',
-    )
-    uploader = models.ForeignKey(AccountUser,
-                                 on_delete=models.CASCADE,
-                                 verbose_name='투표를 생성한 유저',
-                                 related_name='created_votes',
-                                 related_query_name='created_vote'
-                                 )
+    uploader = models.ForeignKey(AccountUser, models.DO_NOTHING)
     total_participants = models.IntegerField()
+    coin = models.ForeignKey(VoteCoin, models.DO_NOTHING)
 
     class Meta:
         managed = False
         db_table = 'vote_vote'
         app_label = 'vote_db1'
-
-class VoteChoice(models.Model):
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
-    choice_id = models.BigAutoField(primary_key=True)
-    choice = models.IntegerField()
-    is_answer = models.IntegerField(blank=True, null=True)
-    participant = models.ForeignKey(AccountUser, on_delete=models.CASCADE)
-    vote = models.ForeignKey(VoteVote, on_delete=models.CASCADE)
-
-    class Meta:
-        managed = False
-        db_table = 'vote_choice'
-        app_label = 'vote_db1'
-
-
