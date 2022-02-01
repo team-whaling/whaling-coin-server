@@ -69,13 +69,17 @@ def tracking():
                 right_answer = 0
                 wrong_answer = 0
                 for part_choice in part_choices:
-                    if part_choice.is_answer is None:   # 투표한 내역이 없을 때
+                    if part_choice.is_answer is None:   # 투표한 내역이 없을
                         pass
                     elif part_choice.is_answer:
                         right_answer += 1
                     else :
                         wrong_answer += 1
-                participant.acc_percent = right_answer / (right_answer + wrong_answer) * 100
+                total_answer = right_answer + wrong_answer
+                if total_answer == 0:   # 아직 투표 개수가 0개이면
+                    participant.acc_percent = 0
+                else:
+                    participant.acc_percent = right_answer / (right_answer + wrong_answer) * 100
                 participant.save()  # 유저 수정한 정보 다 저장.
 
         vote.save() # 투표 모델 변경된것 저장
