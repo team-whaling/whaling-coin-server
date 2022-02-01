@@ -21,8 +21,8 @@ def check_finish():
 @shared_task
 def tracking():
     current_time = datetime.datetime.now(pytz.timezone('Asia/Seoul')).replace(tzinfo=None, microsecond=0, second=0)
-    finsihed_votes = VoteVote.objects.filter(state='finished')
-    for vote in finsihed_votes:
+    finished_votes = VoteVote.objects.filter(state='finished')
+    for vote in finished_votes:
         # Tracking 날짜가 되었으면
         if vote.tracked_at <= current_time:
             vote.state = 'tracked'
@@ -69,9 +69,11 @@ def tracking():
                 right_answer = 0
                 wrong_answer = 0
                 for part_choice in part_choices:
-                    if part_choice.is_answer:
+                    if part_choice.is_answer is None:   # 투표한 내역이 없을 때
+                        pass
+                    elif part_choice.is_answer:
                         right_answer += 1
-                    elif not part_choice.is_answer:
+                    else :
                         wrong_answer += 1
                 participant.acc_percent = right_answer / (right_answer + wrong_answer) * 100
                 participant.save()  # 유저 수정한 정보 다 저장.
