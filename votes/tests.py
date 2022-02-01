@@ -6,7 +6,7 @@ import pytz
 import datetime
 from django.core.exceptions import ObjectDoesNotExist
 
-votevote = VoteVote.objects.filter(state='tracked')
+votevote = VoteVote.objects.filter(state='finished')
 for vote in votevote:
     choices = vote.votechoice_set.all()  # 이 투표에 투표한 행위들 모두 수정해주기.
     for choice in choices:
@@ -18,7 +18,7 @@ for vote in votevote:
         null_answer = 0
         for part_choice in part_choices:
             if part_choice.is_answer is None: # 투표 결과를 알 수 없을 때
-                null_answer += 1
+                pass
             elif part_choice.is_answer:
                 right_answer += 1
             else:
@@ -26,6 +26,5 @@ for vote in votevote:
 
         participant.acc_percent = right_answer / (right_answer + wrong_answer) * 100
         print("{} : {}".format(participant.nickname, participant.acc_percent))
-        print("null : {}".format(null_answer))
 
 
