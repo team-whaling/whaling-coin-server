@@ -1,0 +1,71 @@
+version: '3.8'
+services:
+
+  web:
+    container_name: web
+    build:
+      context: ./
+      dockerfile: Dockerfile.prod
+    command: gunicorn whaling-coin.wsgi:application --bind 0.0.0.0:8000
+    environment:
+      DJANGO_SETTINGS_MODULE: whaling-coin.settings.prod
+    env_file:
+      - .env
+    volumes:
+      - static:/home/app/web/static
+      - media:/home/app/web/media
+    expose:
+      - 8000
+    entrypoint:
+      - sh
+      - config/docker/entrypoint.prod.sh
+
+  nginx:
+    container_name: nginx
+    build: ./config/nginx
+    volumes:
+      - static:/home/app/web/static
+      - media:/home/app/web/media
+    ports:
+      - "80:80"
+    depends_on:
+      - web
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.7-alpine
+    environment:
+      - RABBITMQ_USER=guest
+      - RABBITMQ_PASSWORD=guest
+    ports:
+      - "5672:5672" # Default Port
+      - "15672:15672" # For UI
+    expose:
+      - "15672"
+
+  celery_worker:
+    container_name: celery_worker
+    build:
+      context: ./
+      dockerfile: Dockerfile.prod
+    ports: []
+    depends_on:
+      - web
+      - rabbitmq
+    command: sh -c "celery -A whaling-coin worker --loglevel=info"
+
+  celery_beat:
+    container_name: celery_beat
+    build:
+      context: ./
+      dockerfile: Dockerfile.prod
+    ports: []
+    depends_on:
+        - web
+        - rabbitmq
+        - celery_worker
+    command: sh -c "celery -A whaling-coin beat --loglevel=info"
+
+volumes:
+  static:
+  media:
