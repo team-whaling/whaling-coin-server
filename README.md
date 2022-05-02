@@ -1,8 +1,8 @@
 # Whaling Coin server
 ## Stack
-|Celery|Redis|Upbit
+|Celery|RabbitMQ|Upbit
 |:---:|:---:|:---:|
-|<img src="./images/celery.png" width="50px" title="Celery" />|<img src="./images/redis.png" width="50px" title="Redis" />|<img src="./images/upbit.svg" width="50px" title="Upbit" />
+|<img src="./images/celery.png" width="50px" title="Celery" />|<img src="./images/rabbitmq.png" width="50px" title="RabbitMQ" />|<img src="./images/upbit.svg" width="50px" title="Upbit" />
 
 # Feature
 - 사용한 거래소 : [Upbit](https://upbit.com) 
@@ -25,7 +25,7 @@
 ### 개선해야 할 점
 - 쿼리가 너무 복잡하게 되어 있다. 처음부터 객체 지향적으로 설계했다면 쿼리 수를 줄일 수 있었을 것
 - 멀티 데이터베이스를 사용해도 되는 것인지에 대한 의문
-- Redis에 대한 공부가 부족하여 기본 세팅으로만 되어 있는데, 보안적으로 괜찮은 지
+- RabbitMQ에 대한 공부가 부족하여 기본 세팅으로만 되어 있는데, 보안적으로 괜찮은 지
 
 ### 직면했던 문제
 - Celery가 돌고 있는 과정에서 EC2에 Deploy를 하면 서버가 터져버리는 문제 -> 프리티어 CPU 메모리 문제로 보여서 가상 메모리를 사용하여 해결
